@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+*.py[cod]
+*.db
+*.db-shm
+*.db-wal
+logs/
+evidence/private/
