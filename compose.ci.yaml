@@ -1,0 +1,10 @@
+# CI reuses prebuilt images tagged with the exact source commit. No rebuilding.
+services:
+  order:
+    image: maltashop-ci-order:${BUILD_TAG:?BUILD_TAG must be set}
+  inventory:
+    image: maltashop-ci-inventory:${BUILD_TAG:?BUILD_TAG must be set}
+  payment:
+    image: maltashop-ci-payment:${BUILD_TAG:?BUILD_TAG must be set}
+  notification:
+    image: maltashop-ci-notification:${BUILD_TAG:?BUILD_TAG must be set}

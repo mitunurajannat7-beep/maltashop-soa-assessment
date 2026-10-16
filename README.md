@@ -4,7 +4,7 @@ A Python prototype of a place-order saga: four separately running services, four
 
 ## Development status
 
-Stage 2 implements services, Docker configuration, tests and demonstration helpers. Twenty-one automated tests passed in the preparation environment, including real local HTTP integration. Docker Compose and real RabbitMQ execution still require verification on a Docker-capable computer. CI will be added in a subsequent development commit. Planned checks are not completed evidence.
+Stage 2 implements services, Docker configuration, tests and demonstration helpers. Twenty-one automated tests passed in the preparation environment, including real local HTTP integration. The student subsequently reported all five containers healthy, successful containerized tests and a passing real RabbitMQ smoke test, then Stage 2 pushed. Those local results were reported as text, not screenshot-verified. Stage 3 adds GitHub CI and live restart/outage checks; its run must still be verified. Planned checks are not completed evidence.
 
 ## Prerequisites
 
@@ -112,4 +112,8 @@ An independent outbox worker uses durable routing, persistent messages, mandator
 
 ## Assessment and authorship
 
-Prepared with AI assistance. Review the work and follow institutional disclosure requirements. Preserve genuine development commits and real execution evidence. See `docs/architecture.md`, `docs/evidence-plan.md` and `docs/progress.md`. The final report and CI workflow are not included in Stage 2.
+Prepared with AI assistance. Review the work and follow institutional disclosure requirements. Preserve genuine development commits and real execution evidence. See `docs/architecture.md`, `docs/evidence-plan.md`, `docs/delivery.md` and `docs/progress.md`. Stage 3 includes `.github/workflows/ci.yml`; the final report and its evidence remain separate deliverables.
+
+## GitHub pipeline
+
+Open Actions and select **MaltaShop CI**. Its jobs test business rules/contracts, build each service once, verify live messaging and restart/outage behaviour using the same images, and record a candidate on main. No production deployment is claimed. The continuous-delivery extension is documented in `docs/delivery.md`.

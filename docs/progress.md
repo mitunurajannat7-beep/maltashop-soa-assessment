@@ -20,13 +20,14 @@
 - Windows Git version: 2.55.0.windows.5.
 - GitHub noreply address supplied by user: 295338590+mitunurajannat7-beep@users.noreply.github.com.
 - Stage 2 source, Compose, Dockerfiles, tests and evidence helpers implemented.
-- Twenty-one preparation tests passed; actual Docker/RabbitMQ execution is not yet verified.
+- Twenty-one preparation tests passed. The user subsequently reported all five containers healthy, successful containerized tests, passing live RabbitMQ smoke test and Stage 2 pushed. Treat these as user-reported local results until screenshots are received.
+- Stage 3 adds pinned GitHub Actions, candidate image IDs, live restart/outage checks and artifact logs. A passing GitHub run is not yet verified.
 
 ## Next dependencies
 
-- Download and push Stage 2 as a real new development commit.
-- Build, test and validate the prototype with actual Docker Compose execution.
-- Run CI and collect evidence.
+- Download and push Stage 3 as a real new development commit.
+- Run CI and collect its passing summary screenshot and actual workflow URL.
+- Capture order request/response and correlated service logs using the supplied Windows helpers.
 - Draft and render-check the report; insert original evidence and final repository URL.
 
 ## Outstanding personal details
