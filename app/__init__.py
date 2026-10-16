@@ -1,0 +1,1 @@
+"""MaltaShop educational services."""

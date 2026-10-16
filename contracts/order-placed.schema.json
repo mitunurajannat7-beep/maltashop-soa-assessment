@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:maltashop:order-placed:v1",
+  "title": "Order service producer / Notification service consumer: OrderPlaced v1",
+  "type": "object",
+  "required": ["event_id", "event_type", "schema_version", "occurred_at", "correlation_id", "data"],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "event_type": {"const": "OrderPlaced"},
+    "schema_version": {"const": 1},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "correlation_id": {"type": "string", "minLength": 1},
+    "data": {
+      "type": "object",
+      "required": ["order_id", "customer_id", "sku", "quantity", "amount_cents", "currency"],
+      "properties": {
+        "order_id": {"type": "string", "minLength": 1},
+        "customer_id": {"type": "string", "minLength": 1},
+        "sku": {"type": "string", "minLength": 1},
+        "quantity": {"type": "integer", "minimum": 1},
+        "amount_cents": {"type": "integer", "minimum": 1},
+        "currency": {"const": "EUR"}
+      }
+    }
+  }
+}

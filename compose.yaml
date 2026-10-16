@@ -1,0 +1,119 @@
+name: maltashop-assessment
+
+x-environment: &environment
+  SERVICE_API_KEY: ${SERVICE_API_KEY:-local-demo-service-key}
+  BROKER_URL: amqp://${BROKER_USER:-maltashop}:${BROKER_PASSWORD:-local-demo-broker}@broker:5672/%2F
+
+x-application: &application
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp:size=16777216
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  mem_limit: 128m
+  cpus: 0.5
+  stop_grace_period: 15s
+  logging:
+    driver: json-file
+    options:
+      max-size: "5m"
+      max-file: "3"
+
+services:
+  broker:
+    image: rabbitmq:4-management
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${BROKER_USER:-maltashop}
+      RABBITMQ_DEFAULT_PASS: ${BROKER_PASSWORD:-local-demo-broker}
+    ports:
+      - "127.0.0.1:15672:15672"
+    volumes:
+      - broker_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      start_period: 20s
+      retries: 20
+    mem_limit: 512m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  inventory:
+    <<: *application
+    build:
+      context: .
+      dockerfile: services/inventory/Dockerfile
+    environment:
+      <<: *environment
+      SERVICE_NAME: inventory
+    ports:
+      - "127.0.0.1:8002:8000"
+    volumes:
+      - inventory_data:/data
+
+  payment:
+    <<: *application
+    build:
+      context: .
+      dockerfile: services/payment/Dockerfile
+    environment:
+      <<: *environment
+      SERVICE_NAME: payment
+    ports:
+      - "127.0.0.1:8003:8000"
+    volumes:
+      - payment_data:/data
+
+  notification:
+    <<: *application
+    build:
+      context: .
+      dockerfile: services/notification/Dockerfile
+    environment:
+      <<: *environment
+      SERVICE_NAME: notification
+    ports:
+      - "127.0.0.1:8004:8000"
+    volumes:
+      - notification_data:/data
+    depends_on:
+      broker:
+        condition: service_healthy
+
+  order:
+    <<: *application
+    build:
+      context: .
+      dockerfile: services/order/Dockerfile
+    environment:
+      <<: *environment
+      SERVICE_NAME: order
+      INVENTORY_URL: http://inventory:8000
+      PAYMENT_URL: http://payment:8000
+    ports:
+      - "127.0.0.1:8001:8000"
+    volumes:
+      - order_data:/data
+    depends_on:
+      inventory:
+        condition: service_healthy
+      payment:
+        condition: service_healthy
+      broker:
+        condition: service_started
+
+volumes:
+  order_data:
+  inventory_data:
+  payment_data:
+  notification_data:
+  broker_data:
